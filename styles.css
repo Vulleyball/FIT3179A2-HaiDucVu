@@ -33,8 +33,8 @@
 	color: #212121;
     width: 1230px;
 	height: 3050px;
-	font-family: Lato;
-	font-weight: 300;
+	font-family: 'Josefin Sans', sans-serif;
+	font-weight: 400;
     background-color: white;
     margin: auto;
 	font-size: 18px;
@@ -96,7 +96,7 @@
 
 .heading_container h2 {
 	position: relative;
-	font-family: Roboto;
+	font-family: 'Lato', sans-serif;
 	font-weight: 400;
 	font-size: 32px;
 	padding-bottom: 5px;
