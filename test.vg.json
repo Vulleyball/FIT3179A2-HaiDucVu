@@ -21,15 +21,25 @@
                 "input": "select",
                 "options": [
                     [0, 0],
+                    [9.1,18.2],
+                    [100,35],
+                    [10.8, 50.48],
+                    [-100.17,62.17],
                     [135.6, -26],
-                    [-10, -55],
-                    [10.8, 50.48]
+                    [-60, -26]
+                    
                 ],
                 "labels": [
                     "Default",
-                    "Australia",
-                    "Brazil",
-                    "Europe"
+                    "Africa",
+                    "Asia",
+                    
+                    "Europe",
+                    "North America",
+                    "Oceania",
+                    
+                    "South America"
+                    
                 ],
                 "name": "Map Centre: "
             }
