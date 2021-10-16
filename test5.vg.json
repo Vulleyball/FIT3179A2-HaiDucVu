@@ -1,0 +1,73 @@
+{   
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "Plots two functions using a generated sequence.",
+    "data": {
+        "url": "https://raw.githubusercontent.com/Vulleyball/FIT3179A2-HaiDucVu/main/cancer_new3.csv"
+    },
+    "title":"Air-related deaths over the years",
+    "height": 400,
+    "width": 620,
+    "mark": "bar",
+    "encoding": {
+        "x": {
+            "field": "Year"
+        },
+        "y": {
+            "field": "Air_deaths",
+            "aggregate": "sum",
+            "title": "Air-related deaths"
+            
+            
+        },
+        "color": {
+            "field": "Continent",
+            "scale": {
+                "domain": [
+                  "Africa",
+                  "Asia",
+                  "Europe",
+                  "North America",
+                  "Oceania",
+                  "South America"
+                ],
+                "range": [
+                    "#d55e00",
+              "#cc79a7",
+              "#0072b2",
+              "#e69f00",
+              "#676161",
+              "#009e73"
+                ]
+              }
+        },
+        "tooltip":[
+            {
+                "field": "Year",
+                "title": "Year"
+            },
+            {
+                "field": "Air_deaths",
+                "title": "Average death"
+            },
+            {
+                "field": "Country",
+                "title": "Country"
+            }
+        ]
+    },
+    "config": {
+        "title": {
+            "font": "Lato",
+            "fontSize": 18
+        },
+        "legend": {
+            "title": null,
+            "orient": "bottom",
+            "layout": {
+                "bottom": {
+                    "anchor": "middle"
+                }
+            }
+        }
+    }
+}
