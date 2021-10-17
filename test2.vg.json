@@ -1,0 +1,348 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Life expectancy (x) vs GDP per capita in USD (y)",
+  
+  "width": 640,
+  "height": 400,
+  "data": {
+    "url": "https://raw.githubusercontent.com/Vulleyball/FIT3179A2-HaiDucVu/main/new_data2.csv"
+  },
+  "params": [{
+      "name": "GDP_Above",
+      "value": 0,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 50000,
+        "step": 200,
+        "name": "Minimum GDP: "
+      }
+    },
+    {
+      "name": "Year_above",
+      "value": 2000,
+      "bind": {
+        "input": "range",
+        "min": 2000,
+        "max": 2015,
+        "step": 1,
+        "name": "Year selection: "
+      }
+    },
+    {
+      "name": "Continent_selection",
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "North America",
+          "South America",
+          "Europe",
+          "Africa",
+          "Asia",
+          "Oceania"
+        ],
+        "labels": [
+          "Show All",
+          "North America",
+          "South America",
+          "Europe",
+          "Africa",
+          "Asia",
+          "Oceania"
+        ],
+        "name": "Continent Selection: "
+
+      }
+    }
+  ],
+  "transform": [{
+      "filter": "datum.Year == Year_above"
+    },
+    {
+      "filter": "datum.GDP_total > 200"
+    },
+    {
+      "filter": "datum['Life expectancy'] >40"
+    },
+    {
+      "filter": "Continent_selection == null || datum.Continent == Continent_selection"
+    },
+    {
+      "calculate": "datum['Measles ']/datum.Population * 10000",
+      "as": "Measles"
+    },
+    {
+      "calculate": "datum['GDP_total']/datum.Population",
+      "as": "Average_GDP"
+    },
+    {
+      "filter": "datum['GDP_total']/datum.Population > GDP_Above"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "Life expectancy",
+      "type": "quantitative",
+      "title": null,
+      "axis": {
+        "tickCount": 6
+      },
+      "scale": {
+        "type": "symlog",
+        "domain": [40, 90]
+      }
+    },
+    "y": {
+      "field": "Average_GDP",
+      "type": "quantitative",
+
+      "title": null,
+      "axis": {
+        "tickCount": 4,
+        "format": "~s"
+      },
+      "scale": {
+        "type": "log",
+        "domain": [50, 500000]
+      }
+    }
+  },
+
+  "layer": [
+    {
+      
+      "mark": "circle",
+      "encoding": {
+        "size": {
+          "field": "Population",
+          "type": "quantitative",
+          "scale": {
+            "type": "threshold",
+            "domain": [1000000, 10000000, 50000000, 100000000, 500000000],
+            "range": [10, 50, 150, 200, 300, 400]
+          },
+          "legend": {
+            "format": ".1s",
+            "orient": "top",
+            "anchor": "middle",
+            "offset": 15,
+            "title":null,
+            "padding": 5
+            
+          }
+        },
+        "opacity": { "value": 0}
+    }},
+    {
+      "selection": {
+        "continent_highlight": {
+          "type": "multi",
+          "fields": ["Continent"],
+          "bind": "legend"
+
+        }
+      },
+      "mark": "circle",
+      "encoding": {
+        "size": {
+          "field": "Population",
+          "type": "quantitative",
+          "scale": {
+            "type": "threshold",
+            "domain": [1000000, 10000000, 50000000, 100000000, 500000000],
+            "range": [10, 50, 150, 200, 300, 400]
+          },
+          "legend": {
+            "format": ".1s",
+            "title":null
+          }
+        },
+        "color": {
+          "field": "Continent",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Africa",
+              "Asia",
+              "Europe",
+              "North America",
+              "Oceania",
+              "South America"
+            ],
+            "range": [
+              "#d55e00",
+              "#cc79a7",
+              "#0072b2",
+              "#e69f00",
+              "#676161",
+              "#009e73"
+            ]
+          }
+        },
+        "opacity": {
+          "condition": {
+            "selection": "continent_highlight",
+            "value": 0.6
+          },
+          "value": 0.2
+        },
+        "tooltip": [{
+            "field": "Country",
+            "type": "nominal"
+          },
+          {
+            "field": "Average_GDP",
+            "type": "quantitative",
+            "format": ","
+          },
+          {
+            "field": "Year",
+            "type": "ordinal",
+            "format": ","
+          },
+          {
+            "field": "Measles",
+            "type": "quantitative",
+            "format": ".2f"
+          }
+        ],
+        "text": {
+          "field": "Country"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dx": -15,
+        "fontSize": 11.5,
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "text": {
+          "field": "Country",
+          "type": "nominal"
+        },
+        "color": {
+          "value": "black"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum['Country'] == 'China' || datum['Country'] == 'Russian Federation' || datum['Country'] == 'Brazil' || datum['Country'] == 'Australia' || datum['Country'] == 'United States' || datum['Country'] == 'South Africa'",
+            "value": 1
+          },
+          "value": 0
+        },
+        "tooltip": [{
+            "field": "Country",
+            "type": "nominal"
+          },
+          {
+            "field": "Average_GDP",
+            "type": "quantitative",
+            "format": ".2f"
+          },
+          {
+            "field": "Life expectancy",
+            "type": "quantitative",
+            "format": ","
+          },
+          {
+            "field": "Population",
+            "type": "quantitative",
+            "format": ","
+          },
+          {
+            "field": "Measles",
+            "type": "quantitative",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "window": [{
+              "op": "rank",
+              "as": "ranking"
+          }],
+          "sort": [{
+              "field": "Average_GDP",
+              "order": "ascending"
+          }]
+      },
+      {
+          "filter": "datum.ranking == 1"
+      },
+      {
+          "calculate": "'Lowest GDP: ' + datum['Country']",
+          "as": "text_annotation"
+      }
+      ],
+      "mark": {
+        "point": "transparent",
+        "type": "text",
+        "align": "left",
+        "dx": -90,
+        "dy": 20,
+        "fontSize": 14,
+        "fontStyle": "italic",
+        "color": "teal"
+      },
+      "encoding": {
+        "text": {
+          "field": "text_annotation"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "window": [{
+              "op": "rank",
+              "as": "ranking"
+          }],
+          "sort": [{
+              "field": "Life expectancy",
+              "order": "descending"
+          }]
+      },
+      {
+          "filter": "datum.ranking == 1"
+      },
+      {
+          "calculate": "'Longest life span: ' + datum['Country']",
+          "as": "text_annotation2"
+      }
+      ],
+      "mark": {
+        "point": "transparent",
+        "type": "text",
+        "align": "left",
+        "dx": -420,
+        "dy": -20,
+        "fontSize": 14,
+        "fontStyle": "italic",
+        "color": "teal"
+      },
+      "encoding": {
+        "text": {
+          "field": "text_annotation2"
+        }
+      }
+    }
+  ],"config": {
+    "title": {"fontSize": 18,
+    "font": "Lato"},
+    "legend": {
+      "title": null,
+      "rowPadding": 12,
+      "orient": "bottom",
+      "layout": {"bottom": {"anchor": "middle"}}
+    }
+  }
+}
